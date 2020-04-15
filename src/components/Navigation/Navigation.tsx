@@ -6,7 +6,11 @@ import {
   List as BaseList,
   ListItemText,
 } from "@material-ui/core";
-import DashboardIcon from "@material-ui/icons/Dashboard";
+import AccountIcon from "@material-ui/icons/AccountCircle";
+import TwoIcon from "@material-ui/icons/LooksTwo";
+import ThreeIcon from "@material-ui/icons/Looks3";
+import FourIcon from "@material-ui/icons/Looks4";
+import FiveIcon from "@material-ui/icons/Looks5";
 
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
@@ -17,9 +21,29 @@ const List = styled(BaseList)`
 
 const config = [
   {
-    key: "dashboard",
-    to: "/",
-    Icon: DashboardIcon,
+    key: "2x2",
+    to: "/bingo/2x2",
+    Icon: TwoIcon,
+  },
+  {
+    key: "3x3",
+    to: "/bingo/3x3",
+    Icon: ThreeIcon,
+  },
+  {
+    key: "4x4",
+    to: "/bingo/4x4",
+    Icon: FourIcon,
+  },
+  {
+    key: "5x5",
+    to: "/bingo/5x5",
+    Icon: FiveIcon,
+  },
+  {
+    key: "account",
+    to: "/account",
+    Icon: AccountIcon,
   },
 ];
 
@@ -32,9 +56,11 @@ const Navigation = () => {
           {config.map((item) => (
             <Link to={item.to} key={item.key}>
               <ListItem button selected={location.pathname === item.to}>
-                <ListItemIcon>
-                  <item.Icon />
-                </ListItemIcon>
+                {item.Icon && (
+                  <ListItemIcon>
+                    <item.Icon />
+                  </ListItemIcon>
+                )}
                 <ListItemText primary={t(`navigation.labels.${item.key}`)} />
               </ListItem>
             </Link>

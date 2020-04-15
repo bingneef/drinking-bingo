@@ -1,10 +1,10 @@
 import React from "react";
-import Dashboard from "./Dashboard";
+import BingoCard from "./BingoCard";
 import { renderWithProviders } from "../../../__tests__/helpers/renderWithProviders";
 import { fireEvent } from "@testing-library/react";
 
 test("renders toggle theme button", () => {
-  const { getByText } = renderWithProviders(<Dashboard />);
+  const { getByText } = renderWithProviders(<BingoCard />);
   const buttonElement = getByText(/Toggle data/i);
   expect(buttonElement).toBeInTheDocument();
 

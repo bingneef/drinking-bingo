@@ -3,7 +3,6 @@ function memo(func: Function){
     return function(...args: any){
       const key = JSON.stringify(args);
       if (cache[key]){
-        console.log(cache)
         return cache[key];
       }
       else {

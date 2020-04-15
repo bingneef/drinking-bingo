@@ -25,11 +25,17 @@ const AppBar = styled(BaseAppBar)`
   z-index: ${(props) => props.theme.zIndex.drawer + 1};
 `;
 const Drawer = styled(BaseDrawer)`
-  width: 240px;
-  flex-shrink: 0;
-  .MuiDrawer-paper {
-    width: 240px;
-  }
+  ${({theme}) => `
+    display: none;
+    ${theme.breakpoints.up('md')} {
+      display: block;
+      width: 240px;
+      flex-shrink: 0;
+      .MuiDrawer-paper {
+        width: 240px;
+      }
+    };
+  `}
 `;
 
 const Main = ({ children }: RouteComponentProps & Props) => (
@@ -38,7 +44,7 @@ const Main = ({ children }: RouteComponentProps & Props) => (
       <Toolbar>
         <BrandIcon />
         <Typography variant="h5" noWrap>
-          Bingo
+          First Dates Drinking Bingo
         </Typography>
       </Toolbar>
     </AppBar>

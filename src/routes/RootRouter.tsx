@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { Router } from "@reach/router";
+import { Router, Redirect } from "@reach/router";
 import Main from "../components/Main/Main";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/user/actions";
-import Dashboard from "../pages/Dashboard/Dashboard";
+import Dashboard from "../pages/BingoCard/BingoCard";
 import NotFound from "../pages/NotFound/NotFound";
 
 const RootRouter = () => {
@@ -15,8 +15,13 @@ const RootRouter = () => {
 
   return (
     <Router>
+      <Redirect
+        from="/"
+        to="bingo/3x3"
+        noThrow
+      />
       <Main path="/">
-        <Dashboard path="/" />
+        <Dashboard path="/bingo/:size" />
         <NotFound default />
       </Main>
     </Router>
