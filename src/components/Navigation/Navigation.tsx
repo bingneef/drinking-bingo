@@ -1,11 +1,9 @@
 import React from "react";
 import { Link, Location } from "@reach/router";
-import {
-  ListItem,
-  ListItemIcon,
-  List as BaseList,
-  ListItemText,
-} from "@material-ui/core";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import BaseList from "@material-ui/core/List";
+import ListItemText from "@material-ui/core/ListItemText";
 import TwoIcon from "@material-ui/icons/LooksTwo";
 import ThreeIcon from "@material-ui/icons/Looks3";
 import FourIcon from "@material-ui/icons/Looks4";

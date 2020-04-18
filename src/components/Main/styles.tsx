@@ -1,9 +1,7 @@
 import styled from "styled-components";
 import { Link as BaseLink } from "@reach/router";
-import {
-  AppBar as BaseAppBar,
-  Container as BaseContainer,
-} from "@material-ui/core";
+import BaseAppBar from "@material-ui/core/AppBar";
+import BaseContainer from "@material-ui/core/Container";
 
 export const ToolbarOffset = styled.div`
   ${({ theme }) => theme.mixins.toolbar}

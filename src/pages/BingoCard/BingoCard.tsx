@@ -3,7 +3,7 @@ import { RouteComponentProps } from "@reach/router";
 import useComponentSize from "@rehooks/component-size";
 import { useDelta } from "react-delta";
 import BingoTile from "./components/BingoTile";
-import { useTheme } from "@material-ui/core";
+import { useTheme } from "@material-ui/core/styles";
 import Toast from "./components/Toast";
 import { Root, Container, CellContainer } from "./styles";
 import { useSelector, useDispatch } from "react-redux";
@@ -28,6 +28,7 @@ const BingoCard = (_: Props) => {
   );
 
   const [toasterOpen, setToasterOpen] = useState(false);
+  const [toasterLabel, setToasterLabel] = useState("");
   const linesDelta = useDelta(lines);
   useEffect(() => {
     if (linesDelta === null || linesDelta === undefined) {
@@ -38,9 +39,12 @@ const BingoCard = (_: Props) => {
     const prev = linesDelta.prev || 0;
 
     if (curr > prev) {
+      setToasterLabel(
+        curr === size * 2 ? "Bingo: Volle kaart! 👏" : "Regel klaar! 💪"
+      );
       setToasterOpen(true);
     }
-  }, [linesDelta]);
+  }, [linesDelta, size]);
 
   function toggleListItem(id: number) {
     dispatch(toggleItem(id));
@@ -48,7 +52,7 @@ const BingoCard = (_: Props) => {
 
   return (
     <Root ref={ref}>
-      <Toast open={toasterOpen} setOpen={setToasterOpen} />
+      <Toast open={toasterOpen} setOpen={setToasterOpen} label={toasterLabel} />
       <Container>
         <CellContainer cells={size} cellSize={cellSize}>
           {items.map(({ id, ...props }) => (
