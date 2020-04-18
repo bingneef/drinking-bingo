@@ -1,69 +1,56 @@
 import React, { ReactNode } from "react";
-import { RouteComponentProps } from "@reach/router";
-import {
-  AppBar as BaseAppBar,
-  Toolbar,
-  Typography,
-  Drawer as BaseDrawer,
-  Container as BaseContainer,
-} from "@material-ui/core";
-import styled from "styled-components";
-import Navigation from "../Navigation/Navigation";
+import { RouteComponentProps, navigate } from "@reach/router";
+import { Toolbar, Typography } from "@material-ui/core";
 import BrandIcon from "@material-ui/icons/ChildFriendly";
+import Button from "@material-ui/core/Button";
+import { newGame } from "../../store/game/actions";
+import { useDispatch } from "react-redux";
+import NewGameDialog from "./components/NewGameDialog";
+import { Root, AppBar, Link, Container, ToolbarOffset } from "./styles";
 
 interface Props {
   children: ReactNode;
 }
 
-const ToolbarOffset = styled.div`
-  ${(props) => props.theme.mixins.toolbar}
-`;
-const Root = styled.div`
-  display: flex;
-  flex: 1;
-`;
-const Container = styled(BaseContainer)`
-  display: flex;
-  flex-direction: column;
-`;
+const Main = ({ children }: RouteComponentProps & Props) => {
+  const dispatch = useDispatch();
+  const [newGameDialogOpen, setNewGameDialogOpen] = React.useState(false);
 
-const AppBar = styled(BaseAppBar)`
-  z-index: ${(props) => props.theme.zIndex.drawer + 1};
-`;
+  const handleNewGame = () => {
+    setNewGameDialogOpen(true);
+  };
 
-const Drawer = styled(BaseDrawer)`
-  ${({ theme }) => `
-    display: none;
-    ${theme.breakpoints.up("md")} {
-      display: block;
-      width: 240px;
-      flex-shrink: 0;
-      .MuiDrawer-paper {
-        width: 240px;
-      }
-    };
-  `}
-`;
+  const handleClose = (size?: number) => {
+    setNewGameDialogOpen(false);
 
-const Main = ({ children }: RouteComponentProps & Props) => (
-  <Root>
-    <AppBar position="fixed">
-      <Toolbar>
-        <BrandIcon />
-        <Typography variant="h5" noWrap>
-          First Dates Drinking Bingo
-        </Typography>
-      </Toolbar>
-    </AppBar>
-    <Drawer variant="permanent">
-      <ToolbarOffset />
-      <Navigation />
-    </Drawer>
-    <Container>
-      <ToolbarOffset />
-      {children}
-    </Container>
-  </Root>
-);
+    if (typeof size === "number") {
+      dispatch(newGame(size));
+      navigate("/bingo");
+    }
+  };
+
+  return (
+    <Root>
+      <AppBar position="fixed">
+        <NewGameDialog open={newGameDialogOpen} onClose={handleClose} />
+        <Toolbar>
+          <Link to="/">
+            <BrandIcon />
+            <Typography variant="h5" noWrap>
+              First Dates Drinking Bingo
+            </Typography>
+          </Link>
+          <Button onClick={handleNewGame} color="inherit">
+            Nieuwe Bingo-kaart
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <Container>
+        <ToolbarOffset />
+        {children}
+      </Container>
+    </Root>
+  );
+};
 
 export default Main;

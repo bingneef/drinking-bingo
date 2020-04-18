@@ -38,7 +38,7 @@ const config = [
     key: "5x5",
     to: "/bingo/5x5",
     Icon: FiveIcon,
-  }
+  },
 ];
 
 const Navigation = () => {

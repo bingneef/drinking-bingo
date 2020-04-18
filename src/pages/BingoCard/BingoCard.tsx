@@ -1,93 +1,34 @@
 import React, { useState, useEffect, useRef } from "react";
-import styled from "styled-components";
 import { RouteComponentProps } from "@reach/router";
 import useComponentSize from "@rehooks/component-size";
-import { useDelta } from 'react-delta';
-import range from "lodash/range";
-import useToggleList from "../../hooks/useToggleList";
-import data from "../../data/first-dates.json";
+import { useDelta } from "react-delta";
 import BingoTile from "./components/BingoTile";
 import { useTheme } from "@material-ui/core";
-import shuffle from "../../helpers/shuffle";
-import { generateSeed } from "../../helpers/shuffle";
 import Toast from "./components/Toast";
+import { Root, Container, CellContainer } from "./styles";
+import { useSelector, useDispatch } from "react-redux";
+import { StoreType } from "../../store/types";
+import { toggleItem } from "../../store/game/actions";
 
-interface Props extends RouteComponentProps {
-  size?: string;
-  seed?: string;
-}
+interface Props extends RouteComponentProps {}
 
-const Root = styled.div`
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-`;
-
-const Container = styled.div`
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  ${({ theme }) => `
-    ${theme.breakpoints.up("md")} {
-      padding: ${theme.spacing(2)}px;
-    }
-  `}
-`;
-
-const CellContainer = styled(({ cells, cellSize, ...rest }) => (
-  <div {...rest} />
-))`
-  display: grid;
-  grid-template-columns: ${({ cells, cellSize, theme }) =>
-    range(cells)
-      .map((_) => `${cellSize}px`)
-      .join(" ")};
-  grid-template-rows: ${({ cells, cellSize, theme }) =>
-    range(cells)
-      .map((_) => `${cellSize}px`)
-      .join(" ")};
-  grid-gap: ${({ theme }) => theme.spacing(1)}px;
-`;
-
-const BingoCard = ({ size: propsSize }: Props) => {
+const BingoCard = (_: Props) => {
   const theme = useTheme();
+  const dispatch = useDispatch();
+
+  const game = useSelector((state: StoreType) => state.game.current);
+  const { items = [], lines = 0, size = 3 } = game || {};
+
   const ref = useRef<HTMLDivElement>(null);
   const componentSize = useComponentSize(ref);
-  const [list, lines, setList, toggleListItem] = useToggleList([]);
-  const [toasterOpen, setToasterOpen] = useState(false);
-  const linesDelta = useDelta(lines);
-
-  const size = Number.parseInt(propsSize || "") || 3;
   const minContainerSize = Math.min(componentSize.width, componentSize.height);
   const cellSize = Math.min(
     minContainerSize / size - theme.spacing(3) / 2,
     200
   );
 
-  useEffect(() => {
-    let seed = 0;
-    try {
-      seed = Number.parseInt(window.location.pathname.split("/")[3]);
-    } catch {
-      /* no action required */
-    }
-
-    if (!seed) {
-      seed = generateSeed();
-      window.location.pathname = window.location.pathname + "/" + seed;
-    }
-
-    const selection = shuffle(data.items, seed)
-      .slice(0, size ** 2)
-      .map((label, index) => ({ label, key: index, toggled: false }));
-
-    setList(selection);
-  }, [size, setList]);
-
+  const [toasterOpen, setToasterOpen] = useState(false);
+  const linesDelta = useDelta(lines);
   useEffect(() => {
     if (linesDelta === null || linesDelta === undefined) {
       return;
@@ -101,15 +42,19 @@ const BingoCard = ({ size: propsSize }: Props) => {
     }
   }, [linesDelta]);
 
+  function toggleListItem(id: number) {
+    dispatch(toggleItem(id));
+  }
+
   return (
     <Root ref={ref}>
       <Toast open={toasterOpen} setOpen={setToasterOpen} />
       <Container>
         <CellContainer cells={size} cellSize={cellSize}>
-          {list.map(({ key, ...props }) => (
+          {items.map(({ id, ...props }) => (
             <BingoTile
-              key={key}
-              id={key}
+              key={id}
+              id={id}
               toggleListItem={toggleListItem}
               {...props}
             />

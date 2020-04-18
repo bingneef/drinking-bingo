@@ -1,6 +1,8 @@
 import React from "react";
 import { RouteComponentProps } from "@reach/router";
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import styled from "styled-components";
 
 interface Props extends RouteComponentProps {
   id: string | number;
@@ -10,6 +12,15 @@ interface Props extends RouteComponentProps {
   colToggled?: boolean;
   toggled?: boolean;
 }
+
+const Label = styled(Typography)`
+  font-size: 0.75rem;
+  ${({ theme }) => `
+    ${theme.breakpoints.up("md")} {
+      font-size: 0.875rem;
+    }
+  `}
+`;
 
 const BingoTile = ({
   id,
@@ -31,7 +42,7 @@ const BingoTile = ({
       color={lineToggled ? "secondary" : "primary"}
       variant={toggled ? "contained" : "outlined"}
     >
-      {label}
+      <Label>{label}</Label>
     </Button>
   );
 };
