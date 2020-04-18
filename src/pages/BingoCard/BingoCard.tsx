@@ -1,64 +1,78 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { RouteComponentProps } from "@reach/router";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import useToggleList from "../../hooks/useToggleList";
+import useComponentSize from '@rehooks/component-size'
 import range from "lodash/range";
-import shuffle from "lodash/shuffle";
+import useToggleList from "../../hooks/useToggleList";
 import data from "../../data/first-dates.json";
+import BingoTile from "./components/BingoTile";
+import { useTheme } from "@material-ui/core";
+import shuffle from '../../helpers/shuffle';
+import { generateSeed } from '../../helpers/shuffle';
 
 interface Props extends RouteComponentProps {
   size?: string;
+  seed?: string;
 }
 
 const Root = styled.div`
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  overflow: hidden;
 `;
 
 const Container = styled.div`
-  padding: ${({ theme }) => theme.spacing(2)}px;
+  position: absolute;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  align-items: center;
+  justify-content: center;
+  ${({ theme }) => `
+    ${theme.breakpoints.up("md")} {
+      padding: ${theme.spacing(2)}px;
+    }
+  `}
 `;
 
-const CellContainer = styled(({ cells, cellSize, ...rest }) => <div {...rest} />)`
+const CellContainer = styled(({ cells, cellSize, ...rest }) => (
+  <div {...rest} />
+))`
   display: grid;
-  grid-template-columns: ${({ cells, cellSize }) =>
+  grid-template-columns: ${({ cells, cellSize, theme }) =>
     range(cells)
       .map((_) => `${cellSize}px`)
       .join(" ")};
-  grid-gap: ${({ theme }) => theme.spacing(2)}px;
+  grid-template-rows: ${({ cells, cellSize, theme }) =>
+    range(cells)
+      .map((_) => `${cellSize}px`)
+      .join(" ")};
+  grid-gap: ${({ theme }) => theme.spacing(1)}px;
 `;
 
-const Cell = styled(({ toggled, lineToggled, cellSize, ...rest }) => <Paper {...rest} />)`
-  height: ${({ cellSize }) => `${cellSize}px`};
-  padding: ${({ theme }) => theme.spacing(2)}px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  ${({ toggled }) => toggled && "background-color: red;"}
-  ${({ lineToggled }) => lineToggled && "background-color: blue;"}
-`;
-
-const CellLabel = styled(Typography)`
-  text-align: center;
-`;
-
-const Dashboard = ({size: propsSize}: Props) => {
-  const size = Number.parseInt(propsSize || '') || 3
+const BingoCard = ({ size: propsSize }: Props) => {
+  const theme = useTheme();
+  const ref = useRef<HTMLDivElement>(null);
+  const componentSize = useComponentSize(ref)
   const [list, setList, toggleListItem] = useToggleList([]);
-
-  const sizing = Math.min(window.innerHeight, window.innerWidth);
-  const cellSize = Math.min((sizing - 200) / size, 240);
-
+  
+  const size = Number.parseInt(propsSize || "") || 3;
+  const minContainerSize = Math.min(componentSize.width, componentSize.height);
+  const cellSize = Math.min((minContainerSize / size) - theme.spacing(3) / 2, 200);
+  
   useEffect(() => {
-    const selection = shuffle(data.items)
+    let seed = 0;
+    try {
+      seed = Number.parseInt(window.location.pathname.split('/')[3]);
+    } catch { /* no action required */ }
+
+    if (!seed) {
+      seed = generateSeed();
+      window.location.pathname = window.location.pathname + '/' + seed;
+    }
+
+    const selection = shuffle(data.items, seed)
       .slice(0, size ** 2)
       .map((label, index) => ({ label, key: index, toggled: false }));
 
@@ -66,19 +80,16 @@ const Dashboard = ({size: propsSize}: Props) => {
   }, [size, setList]);
 
   return (
-    <Root>
+    <Root ref={ref}>
       <Container>
         <CellContainer cells={size} cellSize={cellSize}>
-          {list.map(({ key, label, toggled, rowToggled, colToggled }) => (
-            <Cell
+          {list.map(({ key, ...props }) => (
+            <BingoTile
               key={key}
-              cellSize={cellSize}
-              onClick={() => toggleListItem(key)}
-              toggled={toggled}
-              lineToggled={rowToggled || colToggled}
-            >
-              <CellLabel variant="subtitle2">{label}</CellLabel>
-            </Cell>
+              id={key}
+              toggleListItem={toggleListItem}
+              {...props}
+            />
           ))}
         </CellContainer>
       </Container>
@@ -86,4 +97,4 @@ const Dashboard = ({size: propsSize}: Props) => {
   );
 };
 
-export default Dashboard;
+export default BingoCard;

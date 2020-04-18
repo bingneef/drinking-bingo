@@ -1,6 +1,12 @@
 import { ThemeOptions } from "@material-ui/core";
+import blue from '@material-ui/core/colors/blue';
+import pink from '@material-ui/core/colors/pink';
 
 const base: ThemeOptions = {
+  palette: {
+    primary: pink,
+    secondary: blue
+  },
   overrides: {
     MuiCssBaseline: {
       "@global": {

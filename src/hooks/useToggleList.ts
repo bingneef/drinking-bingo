@@ -2,7 +2,6 @@ import { useState } from "react";
 import chunk from "lodash/chunk";
 import reduce from "lodash/reduce";
 import range from "lodash/range";
-import memo from "../helpers/memo";
 
 type ToggledListItemKey = string | number;
 export interface ToggledListItem {
@@ -24,7 +23,7 @@ function useToggleList(list: ToggledListItem[]): [ToggledListItem[], Function, F
     }
 
     listItem.toggled = !listItem.toggled;
-    list = memoAssignToggledStateToListItems(list);
+    list = assignToggledStateToListItems(list);
 
     setToggledList(list);
   }
@@ -54,7 +53,6 @@ function assignToggledStateToListItems(list: ToggledListItem[]) {
 
   return list;
 }
-const memoAssignToggledStateToListItems = memo(assignToggledStateToListItems);
 
 function assignLineToggled(
   line: ToggledListItem[],

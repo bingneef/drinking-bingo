@@ -11,6 +11,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html, body, #root {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+/* Hack for Reach router wrapper divs */
+#root div[tabindex="-1"] {
+  display: flex;
+  flex: 1;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

@@ -5,7 +5,7 @@ import {
   Toolbar,
   Typography,
   Drawer as BaseDrawer,
-  Container,
+  Container as BaseContainer,
 } from "@material-ui/core";
 import styled from "styled-components";
 import Navigation from "../Navigation/Navigation";
@@ -20,14 +20,21 @@ const ToolbarOffset = styled.div`
 `;
 const Root = styled.div`
   display: flex;
+  flex: 1;
 `;
+const Container = styled(BaseContainer)`
+  display: flex;
+  flex-direction: column;
+`;
+
 const AppBar = styled(BaseAppBar)`
   z-index: ${(props) => props.theme.zIndex.drawer + 1};
 `;
+
 const Drawer = styled(BaseDrawer)`
-  ${({theme}) => `
+  ${({ theme }) => `
     display: none;
-    ${theme.breakpoints.up('md')} {
+    ${theme.breakpoints.up("md")} {
       display: block;
       width: 240px;
       flex-shrink: 0;

@@ -21,7 +21,7 @@ const RootRouter = () => {
         noThrow
       />
       <Main path="/">
-        <Dashboard path="/bingo/:size" />
+        <Dashboard path="/bingo/:size/*" />
         <NotFound default />
       </Main>
     </Router>
