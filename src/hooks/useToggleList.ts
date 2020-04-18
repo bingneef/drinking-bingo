@@ -12,8 +12,16 @@ export interface ToggledListItem {
   colToggled?: boolean;
 }
 
-function useToggleList(list: ToggledListItem[]): [ToggledListItem[], Function, Function] {
+function useToggleList(list: ToggledListItem[]): [ToggledListItem[], number, Function, Function] {
   const [toggledList, setToggledList] = useState(list);
+  const [lines, setLines] = useState(0);
+
+  function calcLines(list: ToggledListItem[]) {
+    const size = Math.ceil(Math.sqrt(list.length));
+    const cols = Math.ceil(list.filter(item => item.colToggled).length / size);
+    const rows = Math.ceil(list.filter(item => item.rowToggled).length / size);
+    setLines(cols + rows);
+  }
 
   function toggleListItem(key: ToggledListItemKey) {
     let list = [...toggledList];
@@ -25,10 +33,11 @@ function useToggleList(list: ToggledListItem[]): [ToggledListItem[], Function, F
     listItem.toggled = !listItem.toggled;
     list = assignToggledStateToListItems(list);
 
+    calcLines(list);
     setToggledList(list);
   }
 
-  return [toggledList, setToggledList, toggleListItem];
+  return [toggledList, lines, setToggledList, toggleListItem];
 }
 
 function assignToggledStateToListItems(list: ToggledListItem[]) {
