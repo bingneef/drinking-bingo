@@ -28,4 +28,7 @@ export const Link = styled(BaseLink)`
   display: flex;
   flex-direction: row;
   align-items: center;
+  overflow: hidden;
+  text-overflow: ellepsis;
+  margin-right: ${({ theme }) => theme.spacing(2)}px;
 `;

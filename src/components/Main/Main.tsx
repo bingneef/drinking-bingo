@@ -1,12 +1,13 @@
 import React, { ReactNode } from "react";
 import { RouteComponentProps, navigate } from "@reach/router";
-import { Toolbar, Typography } from "@material-ui/core";
+import { Toolbar, Typography, Hidden } from "@material-ui/core";
 import BrandIcon from "@material-ui/icons/ChildFriendly";
-import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
 import { newGame } from "../../store/game/actions";
 import { useDispatch } from "react-redux";
 import NewGameDialog from "./components/NewGameDialog";
 import { Root, AppBar, Link, Container, ToolbarOffset } from "./styles";
+import Button from "@material-ui/core/Button";
 
 interface Props {
   children: ReactNode;
@@ -40,8 +41,12 @@ const Main = ({ children }: RouteComponentProps & Props) => {
               First Dates Drinking Bingo
             </Typography>
           </Link>
-          <Button onClick={handleNewGame} color="inherit">
-            Nieuwe Bingo-kaart
+          <Button onClick={handleNewGame} color="secondary" variant="contained">
+            <Hidden mdUp>Nieuw</Hidden>
+            <Hidden smDown>
+              <AddIcon />
+              Nieuwe Bingo-kaart
+            </Hidden>
           </Button>
         </Toolbar>
       </AppBar>

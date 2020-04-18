@@ -14,10 +14,16 @@ interface Props extends RouteComponentProps {
 }
 
 const Label = styled(Typography)`
-  font-size: 0.75rem;
+  font-size: 0.6rem;
+  line-height: 1.1;
+  text-transform: initial;
   ${({ theme }) => `
     ${theme.breakpoints.up("md")} {
+      font-size: 0.75rem;
+    }
+    ${theme.breakpoints.up("md")} {
       font-size: 0.875rem;
+      line-height: 1.5;
     }
   `}
 `;
