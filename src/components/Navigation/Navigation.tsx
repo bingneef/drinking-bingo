@@ -6,7 +6,6 @@ import {
   List as BaseList,
   ListItemText,
 } from "@material-ui/core";
-import AccountIcon from "@material-ui/icons/AccountCircle";
 import TwoIcon from "@material-ui/icons/LooksTwo";
 import ThreeIcon from "@material-ui/icons/Looks3";
 import FourIcon from "@material-ui/icons/Looks4";
@@ -39,12 +38,7 @@ const config = [
     key: "5x5",
     to: "/bingo/5x5",
     Icon: FiveIcon,
-  },
-  {
-    key: "account",
-    to: "/account",
-    Icon: AccountIcon,
-  },
+  }
 ];
 
 const Navigation = () => {
