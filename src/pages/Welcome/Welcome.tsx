@@ -26,6 +26,7 @@ const Container = styled.div`
 
 const Image = styled.img`
   margin-bottom: ${(props) => props.theme.spacing(2)}px;
+  max-width: 100%;
 `;
 
 const Paragraph = styled(Typography)`
