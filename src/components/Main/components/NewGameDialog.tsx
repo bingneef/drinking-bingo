@@ -45,7 +45,7 @@ function NewGameDialog({ onClose, open }: Props) {
   }
 
   return (
-    <Dialog onClose={dismiss} open={open}>
+    <Dialog onClose={dismiss} open={open} disableBackdropClick>
       <DialogTitle>Een nieuwe Bingo kaart!</DialogTitle>
       <DialogContent>
         <FormControl>
